@@ -1,0 +1,6 @@
+raw/
+*.gpkg
+*.geojson
+*.zip
+*.tif
+*.csv
