@@ -1,50 +1,17 @@
-\# Hypotheses (frozen 2026-10-23, before profiling any data values)
+# Hypotheses (H1-H4)
 
+Written in the project plan (TDD v4) before any data was downloaded, and recorded in
+this repo as a dated commit. The commit date of this file is the reference date.
+Note: value-level profiling of bronze (category counts, state counts, coordinate checks)
+was run on 2026-10-25; the hypotheses below were not changed after seeing it.
 
+| # | I expect... | because... | If I'm wrong, I'll see... |
+|---|---|---|---|
+| H1 | Some LGAs have total clinic density >= 1 per 10k but public density < 1 per 10k | urban and peri-urban supply is dominated by private for-profit clinics | public density tracks total density closely; few or no LGAs have total >= 1 but public < 1 |
+| H2 | Some LGAs with adequate PHC coverage still have a large share of PHCs > 15 km from a secondary/tertiary hospital | hospitals cluster in state capitals and big towns, rural PHCs don't | median PHC-to-hospital distance < 15 km in nearly all LGAs with adequate coverage |
+| H3 | Rural LGAs have lower registry completeness than urban ones | field listing and updates are weaker away from cities | completeness scores are similar across urban and rural LGAs |
+| H4 | The top-priority LGAs are robust: they stay on the priority list when thresholds change | the worst gaps are large, not marginal | more than half of the top-10 LGAs change when benchmark (10k/20k/30k) or distance (10/15/20 km) changes |
 
-\## H1: Private Sector Masking
-
-\- \*\*Expectation:\*\* Some LGAs exhibit total clinic density that appears adequate (>= 1.0 per 10k population), but their public clinic density falls below 1.0 per 10k.
-
-\- \*\*Rationale:\*\* Wealthier urban/peri-urban supply is heavily skewed toward private, for-profit providers.
-
-\- \*\*Disconfirming Evidence:\*\* Public clinic density closely tracks total density across all LGAs, with zero LGAs showing adequate total supply masking a public deficit.
-
-
-
-\## H2: Referral Deserts
-
-\- \*\*Expectation:\*\* Even among LGAs with adequate primary clinic coverage, a substantial share of facilities sit beyond 15 km straight-line distance from the nearest secondary/tertiary hospital.
-
-\- \*\*Rationale:\*\* Surgical and referral hospitals cluster in state capitals and commercial hubs, while rural primary clinics lack local emergency backup.
-
-\- \*\*Disconfirming Evidence:\*\* The median primary-to-hospital distance is comfortably under 15 km in virtually all LGAs meeting primary coverage benchmarks.
-
-
-
-\## H3: Data Completeness \& Registry Bias
-
-\- \*\*Expectation:\*\* Rural LGAs have lower attribute completeness (unknown ownership, missing facility level, and administrative LGA text mismatches) compared to urban LGAs.
-
-\- \*\*Note on Scope:\*\* Pre-publication cleaning by GRID3 already filtered records lacking GPS coordinates or situated >250m from settlements; completeness is evaluated via registry attributes and spatial boundary agreement.
-
-\- \*\*Disconfirming Evidence:\*\* Completeness rates across administrative attributes are balanced across rural and urban LGAs.
-
-
-
-\## H4: Priority List Robustness
-
-\- \*\*Expectation:\*\* The designated top-10 priority LGAs remain structurally robust when policy thresholds shift (evaluating 10k vs. 20k population targets and 10 km vs. 15 km distance limits).
-
-\- \*\*Rationale:\*\* Structural health deficits in the worst-off LGAs are severe rather than borderline.
-
-\- \*\*Disconfirming Evidence:\*\* Over 50% of the top-10 high-priority LGAs churn or drop off when distance and population thresholds change.
-
-
-
-
-
-Note: H3 completeness uses unknown ownership/level and LGA-name disagreement, not
-
-missing coordinates (the source already removed records without usable coordinates).
-
+Measurement note for H3: the source (GRID3 v2.0) already removed records without usable
+coordinates, so completeness uses Unknown ownership, Unknown level/type and LGA-name
+disagreement, not missing coordinates.

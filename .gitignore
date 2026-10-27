@@ -1,6 +1,15 @@
+# Raw downloads and large files stay out of Git
 raw/
+raw_backup/
 *.gpkg
 *.geojson
 *.zip
 *.tif
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+# CSVs are ignored everywhere EXCEPT the small open-data inputs kept in data/raw_csv/
 *.csv
+!data/raw_csv/*.csv
