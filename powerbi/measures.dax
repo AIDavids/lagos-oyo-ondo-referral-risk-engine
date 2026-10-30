@@ -1,0 +1,61 @@
+// Paste each measure into a table called "_Measures" (Home > Enter data, one blank column, then New measure).
+// Table names assume the BigQuery tables were loaded with their original names.
+
+// ---------- Overview numbers (one definition each; see docs/dashboard_build_notes.md section 2)
+LGAs Assessed = COUNTROWS(mart_lga_decision)
+LGAs Short = CALCULATE(COUNTROWS(mart_lga_decision), mart_lga_decision[public_deficit] = TRUE())
+Add LGAs = CALCULATE(COUNTROWS(mart_lga_decision), mart_lga_decision[action_label] = "Add public clinics")
+Contract LGAs = CALCULATE(COUNTROWS(mart_lga_decision), mart_lga_decision[action_label] = "Contract private clinics")
+No Action LGAs = CALCULATE(COUNTROWS(mart_lga_decision), mart_lga_decision[action_label] = "No action now")
+Hidden Gaps = CALCULATE(COUNTROWS(mart_lga_decision), mart_lga_decision[h1_case] = TRUE())
+Range Low = MAX(mart_kpis[lgas_short_if_unknown_public])
+Population Total = SUM(mart_lga_decision[population_2025])
+People In Short LGAs = CALCULATE(SUM(mart_lga_decision[population_2025]), mart_lga_decision[public_deficit] = TRUE())
+Pct People Short = DIVIDE([People In Short LGAs], [Population Total])
+Clinics Needed = SUM(mart_lga_decision[phc_deficit])
+Pct Clinics Beyond 15km = MAX(mart_kpis[pct_clinics_beyond_15km])
+Median Distance Km = MAX(mart_kpis[median_referral_km])
+
+// ---------- Dynamic text (headline and subheadline follow the slicers)
+Headline = FORMAT([LGAs Short], "0") & " of " & FORMAT([LGAs Assessed], "0") & " LGAs have too few public clinics."
+Subheadline = FORMAT([Add LGAs], "0") & " need more public clinics. " & FORMAT([Contract LGAs], "0") & " can use private clinics already in place."
+Range Text = "Range: " & FORMAT([Range Low], "0") & " to " & FORMAT([LGAs Short], "0") & " if unknown owners count as public"
+
+// ---------- Selected LGA (defaults to the worst-served LGA, so the card is never empty)
+Selected LGA ID =
+VAR picked = SELECTEDVALUE(mart_lga_decision[lga_id])
+VAR top1 = CALCULATE(MAX(mart_lga_decision[lga_id]), ALL(mart_lga_decision), mart_lga_decision[severity_rank] = 1)
+RETURN COALESCE(picked, top1)
+Selected LGA = CALCULATE(MAX(mart_lga_decision[lga_name]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+Selected State = CALCULATE(MAX(mart_lga_decision[state_name]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+Selected Action = CALCULATE(MAX(mart_lga_decision[action_label]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+Selected People Per Clinic = CALCULATE(MAX(mart_lga_decision[pop_per_public_phc]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+Selected Public Clinics = CALCULATE(MAX(mart_lga_decision[phc_public]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+Selected Clinics Missing = CALCULATE(MAX(mart_lga_decision[phc_deficit]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+Selected Median Km = CALCULATE(MAX(mart_lga_decision[median_referral_km]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+Selected Robust = IF(CALCULATE(MAX(mart_lga_decision[robust_top10]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID]), " ★ Robust", "")
+Confidence Text =
+VAR r = CALCULATETABLE(mart_lga_decision, ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+RETURN "Confidence: " & MAXX(r, mart_lga_decision[confidence]) & " · " & MAXX(r, mart_lga_decision[settings_same]) & " of " & MAXX(r, mart_lga_decision[settings_total]) & " data checks"
+Action Fill = SWITCH([Selected Action], "Add public clinics", "#B4281E", "Contract private clinics", "#FFFFFF", "#DDE5E9")
+Action Text Color = SWITCH([Selected Action], "Add public clinics", "#FFFFFF", "Contract private clinics", "#B4281E", "#33474F")
+Profile Sentence = [Selected LGA] & " has " & FORMAT([Selected Public Clinics], "0") & " public clinics: one per " & FORMAT([Selected People Per Clinic], "#,0") & " people. The target is one per 10,000."
+
+// ---------- Candidates and cover (mart_candidate_cover; related on lga_id)
+Candidates Available = CALCULATE(SUM(mart_candidate_cover[candidates_available]), mart_candidate_cover[lga_id] = [Selected LGA ID])
+Cover Ratio = CALCULATE(MAX(mart_candidate_cover[cover_ratio]), mart_candidate_cover[lga_id] = [Selected LGA ID])
+Cover Label = CALCULATE(MAX(mart_candidate_cover[cover_label]), mart_candidate_cover[lga_id] = [Selected LGA ID])
+Cover Text = IF(ISBLANK([Cover Ratio]), "No candidates", FORMAT([Candidates Available], "0") & " vs " & FORMAT([Selected Clinics Missing], "0") & " needed: " & [Cover Label] & " (" & FORMAT([Cover Ratio], "0.00") & "x)")
+
+// ---------- Ranking toggle (create a disconnected table: Enter data, column "Choice": Clinics missing / People per public clinic)
+Rank Value =
+VAR choice = SELECTEDVALUE('Rank By'[Choice], "People per public clinic")
+RETURN IF(choice = "Clinics missing",
+  RANKX(ALLSELECTED(mart_lga_decision), CALCULATE(MAX(mart_lga_decision[phc_deficit])), , DESC, Dense),
+  RANKX(ALLSELECTED(mart_lga_decision), CALCULATE(MAX(mart_lga_decision[pop_per_public_phc])), , DESC, Dense))
+
+// ---------- Reliability matrix (mart_scenarios related to mart_confidence on lga_id)
+Same Action Flag =
+VAR a = MAX(mart_scenarios[action])
+VAR b = CALCULATE(MAX(mart_confidence[base_action]))
+RETURN IF(a = b, 1, 0)
