@@ -71,3 +71,9 @@ Desktop: real LGA shapes (shape map from TopoJSON, key = LGA code), three small 
 - **Hidden gaps** = short LGAs that look fine when private clinics are counted (24 of 31).
 - **LGA Profile** gains: "How we reached this recommendation" (the four rules in order, with pass or fail), a confidence strip (18 settings), and a peer comparison.
 - Run order: sql/03_gold/05, 06, 07, then sql/04_tests/03_gold_tests_v2.sql (zero rows = pass), then 04_checks.sql.
+
+## 9. Update after first run (2026-10-29)
+- Real results: 71 LGAs, 31 short (range 21 to 31 if unknown owners count as public), 24 hidden gaps, 18.8 million people (69%) in short LGAs, 999 clinics needed. All 8 contracting LGAs are in Lagos.
+- The four robust LGAs (Alimosho, Ikorodu, Eti Osa, Ido) are both the four largest and the four with the most people per public clinic, so the finding is not an artefact of ranking by volume.
+- Alimosho and Ikorodu are contracting LGAs where private clinics barely cover the gap (about 1.05x). Upgrade candidates (public health posts) are far fewer than clinics needed in most add-public LGAs: new construction is the main lever.
+- Confidence redefined over 6 data checks (see ADR-005). Default ranking = people per public clinic.
