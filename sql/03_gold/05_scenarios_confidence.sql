@@ -39,10 +39,12 @@ y AS (
   FROM x CROSS JOIN c)
 SELECT * FROM y;
 
--- Confidence = share of the 18 settings where the LGA keeps its base-case action
--- (base = 1 per 10,000, 15 km, confirmed owners). High >= 90%, Medium 60-89%, Low < 60%.
+-- Confidence = share of the 6 DATA checks (3 hospital limits x 2 ownership views) where the LGA keeps its
+-- base-case action, at the stated target of 1 per 10,000. The target itself is a policy choice, not data
+-- uncertainty, so it is shown separately on the Reliability page. High = 6 of 6, Medium = 4-5, Low = 3 or fewer.
 CREATE OR REPLACE TABLE gold.mart_confidence AS
-WITH base AS (SELECT lga_id, action AS base_action FROM gold.mart_scenarios WHERE scenario = 'bench=10000|km=15|confirmed')
+WITH s AS (SELECT * FROM gold.mart_scenarios WHERE benchmark = 10000),
+base AS (SELECT lga_id, action AS base_action FROM s WHERE beyond_km = 15 AND owner_view = 'confirmed')
 SELECT s.lga_id, b.base_action,
        COUNTIF(s.action = b.base_action) AS settings_same,
        COUNT(*) AS settings_total,
@@ -50,5 +52,5 @@ SELECT s.lga_id, b.base_action,
        CASE WHEN SAFE_DIVIDE(COUNTIF(s.action = b.base_action), COUNT(*)) >= 0.9 THEN 'High'
             WHEN SAFE_DIVIDE(COUNTIF(s.action = b.base_action), COUNT(*)) >= 0.6 THEN 'Medium'
             ELSE 'Low' END AS confidence
-FROM gold.mart_scenarios s JOIN base b ON s.lga_id = b.lga_id
+FROM s JOIN base b ON s.lga_id = b.lga_id
 GROUP BY s.lga_id, b.base_action;
