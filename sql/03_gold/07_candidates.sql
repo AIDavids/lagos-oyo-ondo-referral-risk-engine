@@ -7,7 +7,7 @@ CREATE OR REPLACE TABLE gold.mart_candidates AS
 WITH d AS (SELECT lga_id, lga_name, state_name, action_low, phc_deficit FROM gold.mart_lga_decision),
 pts AS (
   SELECT f.globalid, f.lga_id, f.facility_name, s.ward, f.ownership, f.ownership_type,
-         f.facility_level_option, f.in_registry, f.lga_name_conflict, s.lga AS registry_lga, s.lga_assigned, ST_GEOGPOINT(f.longitude, f.latitude) AS geog
+         f.facility_level_option, f.in_registry, f.lga_name_conflict, s.lga AS registry_lga, s.lga_assigned, REGEXP_EXTRACT(s.ward, r'\(([^)]+)\)') AS ward_lga_hint, ST_GEOGPOINT(f.longitude, f.latitude) AS geog
   FROM gold.fact_facility f
   JOIN silver.facility_clean s ON s.globalid = f.globalid
   WHERE f.facility_level = 'Primary'),
@@ -32,6 +32,10 @@ SELECT c.lga_id, c.lga_name, c.state_name, c.candidate_type, c.globalid, c.facil
          ORDER BY c.in_registry DESC,
            -- rank down clinics whose registry LGA differs from the LGA their point falls in (border or label errors)
            (REGEXP_REPLACE(LOWER(c.registry_lga), r'[^a-z0-9]', '') != REGEXP_REPLACE(LOWER(c.lga_assigned), r'[^a-z0-9]', '')),
+           -- rank down clinics whose ward label names another LGA, e.g. 'Ijegun (Amuwo Odofin)' inside Alimosho
+           (c.ward_lga_hint IS NOT NULL
+            AND NOT (STARTS_WITH(REGEXP_REPLACE(LOWER(c.lga_assigned), r'[^a-z0-9]', ''), REGEXP_REPLACE(LOWER(c.ward_lga_hint), r'[^a-z0-9]', ''))
+                  OR STARTS_WITH(REGEXP_REPLACE(LOWER(c.ward_lga_hint), r'[^a-z0-9]', ''), REGEXP_REPLACE(LOWER(c.lga_assigned), r'[^a-z0-9]', '')))),
            c.lga_name_conflict, (c.ownership_type = 'Unknown'), (c.facility_level_option = 'Unknown'), COALESCE(n.km_to_public, 30) DESC) AS candidate_rank
 FROM cand c LEFT JOIN near n ON n.globalid = c.globalid;
 

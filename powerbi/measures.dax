@@ -59,3 +59,8 @@ Same Action Flag =
 VAR a = MAX(mart_scenarios[action])
 VAR b = CALCULATE(MAX(mart_confidence[base_action]))
 RETURN IF(a = b, 1, 0)
+
+// ---------- Phone boxes (Matrix: rows = dim_lga_tile[tile_row], columns = tile_col, values = [Tile Label])
+Tile Label = MAX(dim_lga_tile[lga_label])
+Tile Fill = SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#B4281E", "Contract private clinics", "#FFFFFF", "#DDE5E9")
+Tile Text Color = SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#FFFFFF", "Contract private clinics", "#B4281E", "#33474F")

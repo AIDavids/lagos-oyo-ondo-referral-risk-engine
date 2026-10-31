@@ -7,3 +7,11 @@ SELECT d.lga_id, CAST(d.lgacode AS STRING) AS lgacode, d.lga_name, d.state_name,
        ST_Y(ST_CENTROID(l.geog)) AS centroid_lat,
        UPPER(SUBSTR(REGEXP_REPLACE(d.lga_name, r'[^A-Za-z]', ''), 1, 3)) AS lga_label
 FROM gold.dim_lga d JOIN silver.lga_clean l ON l.lga_id = d.lga_id;
+
+-- Phone boxes: one box per LGA in an alphabetical grid, 5 boxes per row, one grid per state.
+-- (Geography is not preserved on purpose: the desktop page has the real map. Boxes are easy to tap.)
+CREATE OR REPLACE TABLE gold.dim_lga_tile AS
+SELECT lga_id, state_name, lga_name, lga_label,
+       MOD(ROW_NUMBER() OVER (PARTITION BY state_name ORDER BY lga_name) - 1, 5) + 1 AS tile_col,
+       DIV(ROW_NUMBER() OVER (PARTITION BY state_name ORDER BY lga_name) - 1, 5) + 1 AS tile_row
+FROM gold.dim_lga_geo;

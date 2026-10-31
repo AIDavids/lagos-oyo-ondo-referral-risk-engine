@@ -16,7 +16,7 @@
 | Gold | 03_gold/05 | 18 scenarios per LGA and confidence | mart_scenarios, mart_confidence | Reliability, profile |
 | Gold | 03_gold/06 | Decision table, state summary, Overview KPIs | mart_lga_decision, mart_state_summary, mart_kpis | Overview, Priorities |
 | Gold | 03_gold/07 | Candidate clinics and cover | mart_candidates, mart_candidate_cover | Priorities, profile |
-| Gold | 03_gold/08 | LGA codes, centroids, labels | dim_lga_geo | maps |
+| Gold | 03_gold/08 | LGA codes (shape map key), centroids, labels, phone box grid | dim_lga_geo, dim_lga_tile | maps |
 
 ## Power BI layer (DAX in powerbi/measures.dax)
 | Measure group | Examples | Reads from (SQL) | Page |

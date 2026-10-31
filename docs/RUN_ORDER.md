@@ -16,7 +16,7 @@ Run the files in the order below. Each file reads tables created by the files be
 | 1 | sql/03_gold/05_scenarios_confidence.sql | 2 tables created | nothing unless an error |
 | 2 | sql/03_gold/06_decision_state_kpis.sql | 3 tables created | nothing unless an error |
 | 3 | sql/03_gold/07_candidates.sql | 2 tables created | nothing unless an error |
-| 4 | sql/03_gold/08_geo.sql | 1 table created | nothing unless an error |
+| 4 | sql/03_gold/08_geo.sql | 2 tables created (dim_lga_geo, dim_lga_tile) | nothing unless an error |
 | 5 | sql/04_tests/03_gold_tests_v2.sql | "There is no data to display" | that message, or the rows |
 | 6 | sql/04_tests/06_lgacode_unique.sql | "There is no data to display" | that message, or the rows |
 | 7 | sql/04_tests/04_checks.sql (6 SELECTs, one at a time) | 6 result tables | all six |
