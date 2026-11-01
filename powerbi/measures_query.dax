@@ -23,22 +23,23 @@ DEFINE
   MEASURE _Measures[Selected LGA ID] = VAR picked = SELECTEDVALUE(mart_lga_decision[lga_id])
     VAR top1 = CALCULATE(MAX(mart_lga_decision[lga_id]), ALL(mart_lga_decision), mart_lga_decision[severity_rank] = 1)
     RETURN COALESCE(picked, top1)
-  MEASURE _Measures[Selected LGA] = CALCULATE(MAX(mart_lga_decision[lga_name]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Selected State] = CALCULATE(MAX(mart_lga_decision[state_name]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Selected Action] = CALCULATE(MAX(mart_lga_decision[action_label]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Selected People Per Clinic] = CALCULATE(MAX(mart_lga_decision[pop_per_public_phc]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Selected Public Clinics] = CALCULATE(MAX(mart_lga_decision[phc_public]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Selected Clinics Missing] = CALCULATE(MAX(mart_lga_decision[phc_deficit]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Selected Median Km] = CALCULATE(MAX(mart_lga_decision[median_referral_km]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Selected Robust] = IF(CALCULATE(MAX(mart_lga_decision[robust_top10]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID]), " ★ Robust", "")
-  MEASURE _Measures[Confidence Text] = VAR r = CALCULATETABLE(mart_lga_decision, ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
+  MEASURE _Measures[Selected LGA] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_lga_decision[lga_name]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
+  MEASURE _Measures[Selected State] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_lga_decision[state_name]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
+  MEASURE _Measures[Selected Action] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_lga_decision[action_label]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
+  MEASURE _Measures[Selected People Per Clinic] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_lga_decision[pop_per_public_phc]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
+  MEASURE _Measures[Selected Public Clinics] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_lga_decision[phc_public]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
+  MEASURE _Measures[Selected Clinics Missing] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_lga_decision[phc_deficit]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
+  MEASURE _Measures[Selected Median Km] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_lga_decision[median_referral_km]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
+  MEASURE _Measures[Selected Robust] = VAR sel = [Selected LGA ID] RETURN IF(CALCULATE(COUNTROWS(mart_lga_decision), ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel, mart_lga_decision[robust_top10] = TRUE()) > 0, " ★ Robust", "")
+  MEASURE _Measures[Confidence Text] = VAR sel = [Selected LGA ID]
+    VAR r = CALCULATETABLE(mart_lga_decision, ALL(mart_lga_decision), mart_lga_decision[lga_id] = sel)
     RETURN "Confidence: " & MAXX(r, mart_lga_decision[confidence]) & " · " & MAXX(r, mart_lga_decision[settings_same]) & " of " & MAXX(r, mart_lga_decision[settings_total]) & " data checks"
   MEASURE _Measures[Action Fill] = SWITCH([Selected Action], "Add public clinics", "#B4281E", "Contract private clinics", "#B4281E", "#DDE5E9")
   MEASURE _Measures[Action Text Color] = SWITCH([Selected Action], "Add public clinics", "#FFFFFF", "Contract private clinics", "#FFFFFF", "#33474F")
   MEASURE _Measures[Profile Sentence] = [Selected LGA] & " has " & FORMAT([Selected Public Clinics], "0") & " public clinics: one per " & FORMAT([Selected People Per Clinic], "#,0") & " people. The target is one per 10,000."
-  MEASURE _Measures[Candidates Available] = CALCULATE(SUM(mart_candidate_cover[candidates_available]), mart_candidate_cover[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Cover Ratio] = CALCULATE(MAX(mart_candidate_cover[cover_ratio]), mart_candidate_cover[lga_id] = [Selected LGA ID])
-  MEASURE _Measures[Cover Label] = CALCULATE(MAX(mart_candidate_cover[cover_label]), mart_candidate_cover[lga_id] = [Selected LGA ID])
+  MEASURE _Measures[Candidates Available] = VAR sel = [Selected LGA ID] RETURN CALCULATE(SUM(mart_candidate_cover[candidates_available]), ALL(mart_lga_decision), mart_candidate_cover[lga_id] = sel)
+  MEASURE _Measures[Cover Ratio] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_candidate_cover[cover_ratio]), ALL(mart_lga_decision), mart_candidate_cover[lga_id] = sel)
+  MEASURE _Measures[Cover Label] = VAR sel = [Selected LGA ID] RETURN CALCULATE(MAX(mart_candidate_cover[cover_label]), ALL(mart_lga_decision), mart_candidate_cover[lga_id] = sel)
   MEASURE _Measures[Cover Text] = IF(ISBLANK([Cover Ratio]), "No candidates", FORMAT([Candidates Available], "0") & " vs " & FORMAT([Selected Clinics Missing], "0") & " needed: " & [Cover Label] & " (" & FORMAT([Cover Ratio], "0.00") & "x)")
   MEASURE _Measures[Same Action Flag] = VAR a = MAX(mart_scenarios[action])
     VAR b = MAX(mart_lga_decision[action_low])
@@ -47,10 +48,10 @@ DEFINE
   MEASURE _Measures[Tile Fill] = SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#B4281E", "Contract private clinics", "#FFFFFF", "#DDE5E9")
   MEASURE _Measures[Tile Text Color] = SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#FFFFFF", "Contract private clinics", "#B4281E", "#33474F")
 
-EVALUATE ROW("LGAs Assessed", [LGAs Assessed], "LGAs Short", [LGAs Short], "Add", [Add LGAs], "Contract", [Contract LGAs], "Hidden Gaps", [Hidden Gaps])
+EVALUATE ROW("LGAs Assessed", [LGAs Assessed], "LGAs Short", [LGAs Short], "Add", [Add LGAs], "Contract", [Contract LGAs], "Hidden Gaps", [Hidden Gaps], "Selected LGA", [Selected LGA], "Selected Action", [Selected Action])
 
 // ---- Add after creating the "Rank By" table (Enter data, one column named Choice: Clinics missing / People per public clinic) ----
 // MEASURE _Measures[Rank Value] = VAR choice = SELECTEDVALUE('Rank By'[Choice], "People per public clinic")
-//     RETURN IF(choice = "Clinics missing",
-//     RANKX(ALLSELECTED(mart_lga_decision), CALCULATE(MAX(mart_lga_decision[phc_deficit])), , DESC, Dense),
-//     RANKX(ALLSELECTED(mart_lga_decision), CALCULATE(MAX(mart_lga_decision[pop_per_public_phc])), , DESC, Dense))
+// RETURN IF(choice = "Clinics missing",
+// RANKX(ALLSELECTED(mart_lga_decision), CALCULATE(MAX(mart_lga_decision[phc_deficit])), , DESC, Dense),
+// RANKX(ALLSELECTED(mart_lga_decision), CALCULATE(MAX(mart_lga_decision[pop_per_public_phc])), , DESC, Dense))
