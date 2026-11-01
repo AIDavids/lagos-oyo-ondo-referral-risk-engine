@@ -37,8 +37,8 @@ Selected Robust = IF(CALCULATE(MAX(mart_lga_decision[robust_top10]), ALL(mart_lg
 Confidence Text =
 VAR r = CALCULATETABLE(mart_lga_decision, ALL(mart_lga_decision), mart_lga_decision[lga_id] = [Selected LGA ID])
 RETURN "Confidence: " & MAXX(r, mart_lga_decision[confidence]) & " · " & MAXX(r, mart_lga_decision[settings_same]) & " of " & MAXX(r, mart_lga_decision[settings_total]) & " data checks"
-Action Fill = SWITCH([Selected Action], "Add public clinics", "#B4281E", "Contract private clinics", "#FFFFFF", "#DDE5E9")
-Action Text Color = SWITCH([Selected Action], "Add public clinics", "#FFFFFF", "Contract private clinics", "#B4281E", "#33474F")
+Action Fill = SWITCH([Selected Action], "Add public clinics", "#B4281E", "Contract private clinics", "#B4281E", "#DDE5E9")
+Action Text Color = SWITCH([Selected Action], "Add public clinics", "#FFFFFF", "Contract private clinics", "#FFFFFF", "#33474F")
 Profile Sentence = [Selected LGA] & " has " & FORMAT([Selected Public Clinics], "0") & " public clinics: one per " & FORMAT([Selected People Per Clinic], "#,0") & " people. The target is one per 10,000."
 
 // ---------- Candidates and cover (mart_candidate_cover; related on lga_id)
