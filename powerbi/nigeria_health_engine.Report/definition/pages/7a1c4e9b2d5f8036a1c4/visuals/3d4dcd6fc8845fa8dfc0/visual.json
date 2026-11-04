@@ -3,11 +3,11 @@
   "name": "3d4dcd6fc8845fa8dfc0",
   "position": {
     "x": 228,
-    "y": 513,
-    "z": 1026,
+    "y": 523,
+    "z": 1020,
     "height": 26,
     "width": 600,
-    "tabOrder": 1026
+    "tabOrder": 1020
   },
   "visual": {
     "visualType": "textbox",
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Red: Add public clinics.  Pink: Contract private clinics.  Grey: No action now.  Hover a tile for the LGA name.",
+                    "value": "Red: Add public clinics.  Pink with red outline: Contract private clinics.  Grey: No action now.  Hover for the LGA name.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "7.5pt",

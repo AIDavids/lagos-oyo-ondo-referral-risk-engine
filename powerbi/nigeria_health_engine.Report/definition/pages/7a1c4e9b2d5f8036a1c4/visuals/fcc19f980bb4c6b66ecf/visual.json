@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "fcc19f980bb4c6b66ecf",
   "position": {
-    "x": 228,
-    "y": 243,
+    "x": 227.55555555555554,
+    "y": 243.2,
     "z": 1017,
-    "height": 26,
-    "width": 210,
+    "height": 34.133333333333333,
+    "width": 210.48888888888888,
     "tabOrder": 1017
   },
   "visual": {
@@ -21,14 +21,13 @@
                   {
                     "value": "Lagos",
                     "textStyle": {
+                      "fontWeight": "bold",
                       "fontFamily": "Georgia",
                       "fontSize": "10.5pt",
-                      "color": "#0B2530",
-                      "fontWeight": "bold"
+                      "color": "#0b2530"
                     }
                   }
-                ],
-                "horizontalTextAlignment": "left"
+                ]
               }
             ]
           }

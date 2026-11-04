@@ -19,9 +19,9 @@ DEFINE
   MEASURE _Measures[Clinics Needed] = COALESCE(SUM(mart_lga_decision[phc_deficit]), 0)
   MEASURE _Measures[Pct Clinics Beyond 15km] = MAX(mart_kpis[pct_clinics_beyond_15km])
   MEASURE _Measures[Median Distance Km] = MAX(mart_kpis[median_referral_km])
-  MEASURE _Measures[Headline] = FORMAT([LGAs Short], "0") & " of " & FORMAT([LGAs Assessed], "0") & " LGAs have too few public clinics."
-  MEASURE _Measures[Subheadline] = FORMAT([Add LGAs], "0") & " need more public clinics. " & FORMAT([Contract LGAs], "0") & " can use private clinics already in place."
-  MEASURE _Measures[Range Text] = "Range: " & FORMAT([Range Low], "0") & " to " & FORMAT([LGAs Short], "0") & " if unknown owners count as public"
+  MEASURE _Measures[Headline] = VAR n = [LGAs Assessed] VAR s = [LGAs Short] RETURN SWITCH(TRUE(), n = 1, IF(s = 1, "This LGA has too few public clinics.", "This LGA has enough public clinics."), s = 0, "All " & FORMAT(n, "0") & " LGAs have enough public clinics.", FORMAT(s, "0") & " of " & FORMAT(n, "0") & " LGAs have too few public clinics.")
+  MEASURE _Measures[Subheadline] = SWITCH(TRUE(), [LGAs Assessed] = 1, IF([LGAs Short] = 1, "Recommended action: " & [Selected Action] & ".", "No action needed now."), [LGAs Short] = 0, "No LGA in this selection needs action now.", FORMAT([Add LGAs], "0") & " need more public clinics. " & FORMAT([Contract LGAs], "0") & " can use private clinics already in place.")
+  MEASURE _Measures[Range Text] = IF([LGAs Assessed] < CALCULATE(COUNTROWS(mart_lga_decision), ALL(mart_lga_decision), ALL(mart_state_summary)), "", "Range: " & FORMAT([Range Low], "0") & " to " & FORMAT([LGAs Short], "0") & " if unknown owners count as public")
   MEASURE _Measures[Selected LGA ID] = VAR picked = SELECTEDVALUE(mart_lga_decision[lga_id])
     VAR top1 = CALCULATE(MAX(mart_lga_decision[lga_id]), ALL(mart_lga_decision), mart_lga_decision[severity_rank] = 1)
     RETURN COALESCE(picked, top1)
@@ -47,9 +47,9 @@ DEFINE
   MEASURE _Measures[Same Action Flag] = VAR a = MAX(mart_scenarios[action])
     VAR b = MAX(mart_lga_decision[action_low])
     RETURN IF(a = b, 1, 0)
-  MEASURE _Measures[Tile Label] = MAX(dim_lga_tile[lga_label])
-  MEASURE _Measures[Tile Fill] = SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#B4281E", "Contract private clinics", "#FFFFFF", "#DDE5E9")
-  MEASURE _Measures[Tile Text Color] = SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#FFFFFF", "Contract private clinics", "#B4281E", "#33474F")
+  MEASURE _Measures[Tile Label] = IF(HASONEVALUE(dim_lga_tile[tile_col]) && HASONEVALUE(dim_lga_tile[tile_row]), MAX(dim_lga_tile[tile_label]))
+  MEASURE _Measures[Tile Fill] = IF(ISBLANK([Tile Label]), "#FFFFFF", SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#B4281E", "Contract private clinics", "#E8B4AF", "#C9D3D8"))
+  MEASURE _Measures[Tile Text Color] = IF(ISBLANK([Tile Label]), "#FFFFFF", SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#FFFFFF", "Contract private clinics", "#7A1F18", "#33474F"))
 
 EVALUATE ROW("LGAs Assessed", [LGAs Assessed], "LGAs Short", [LGAs Short], "Add", [Add LGAs], "Contract", [Contract LGAs], "Hidden Gaps", [Hidden Gaps], "Selected LGA", [Selected LGA], "Selected Action", [Selected Action])
 

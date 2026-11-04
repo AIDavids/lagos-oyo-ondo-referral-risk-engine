@@ -25,8 +25,24 @@
           }
         }
       }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
     ]
   },
+  "publicCustomVisuals": [
+    "deneb7E15AEF80B9E4D4F8E12924291ECE89A"
+  ],
   "resourcePackages": [
     {
       "name": "SharedResources",
@@ -52,21 +68,6 @@
           "name": "PHC_Access07451446834313524.json",
           "path": "PHC_Access07451446834313524.json",
           "type": "CustomTheme"
-        },
-        {
-          "name": "lga_three_states07374230180554653.json",
-          "path": "lga_three_states07374230180554653.json",
-          "type": "ShapeMap"
-        },
-        {
-          "name": "lga_three_states8753646177927223.json",
-          "path": "lga_three_states8753646177927223.json",
-          "type": "ShapeMap"
-        },
-        {
-          "name": "lga_three_states10296587877417251.json",
-          "path": "lga_three_states10296587877417251.json",
-          "type": "ShapeMap"
         }
       ]
     }

@@ -98,19 +98,19 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure Headline = ```
-			FORMAT([LGAs Short], "0") & " of " & FORMAT([LGAs Assessed], "0") & " LGAs have too few public clinics."
+			VAR n = [LGAs Assessed] VAR s = [LGAs Short] RETURN SWITCH(TRUE(), n = 1, IF(s = 1, "This LGA has too few public clinics.", "This LGA has enough public clinics."), s = 0, "All " & FORMAT(n, "0") & " LGAs have enough public clinics.", FORMAT(s, "0") & " of " & FORMAT(n, "0") & " LGAs have too few public clinics.")
 			  
 			```
 		lineageTag: c59df381-65f8-4047-83a3-4bc94544b8b8
 
 	measure Subheadline = ```
-			FORMAT([Add LGAs], "0") & " need more public clinics. " & FORMAT([Contract LGAs], "0") & " can use private clinics already in place."
+			SWITCH(TRUE(), [LGAs Assessed] = 1, IF([LGAs Short] = 1, "Recommended action: " & [Selected Action] & ".", "No action needed now."), [LGAs Short] = 0, "No LGA in this selection needs action now.", FORMAT([Add LGAs], "0") & " need more public clinics. " & FORMAT([Contract LGAs], "0") & " can use private clinics already in place.")
 			  
 			```
 		lineageTag: fa47f445-c25c-478d-a826-e3c68317b030
 
 	measure 'Range Text' = ```
-			"Range: " & FORMAT([Range Low], "0") & " to " & FORMAT([LGAs Short], "0") & " if unknown owners count as public"
+			IF([LGAs Assessed] < CALCULATE(COUNTROWS(mart_lga_decision), ALL(mart_lga_decision), ALL(mart_state_summary)), "", "Range: " & FORMAT([Range Low], "0") & " to " & FORMAT([LGAs Short], "0") & " if unknown owners count as public")
 			  
 			```
 		lineageTag: f0cf4433-c10e-4e85-a9ad-6f3d66fd1997
@@ -240,19 +240,19 @@ table _Measures
 		lineageTag: f37c964e-2075-4af3-813d-1e6e697ddbae
 
 	measure 'Tile Label' = ```
-			MAX(dim_lga_tile[lga_label])
+			IF(HASONEVALUE(dim_lga_tile[tile_col]) && HASONEVALUE(dim_lga_tile[tile_row]), MAX(dim_lga_tile[tile_label]))
 			  
 			```
 		lineageTag: cb18e581-9eb9-48b2-80e4-3e140bd3c331
 
 	measure 'Tile Fill' = ```
-			SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#B4281E", "Contract private clinics", "#FFFFFF", "#DDE5E9")
+			IF(ISBLANK([Tile Label]), "#FFFFFF", SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#B4281E", "Contract private clinics", "#E8B4AF", "#C9D3D8"))
 			  
 			```
 		lineageTag: 2615857c-d82c-42c4-87d2-91676f2c675a
 
 	measure 'Tile Text Color' = ```
-			SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#FFFFFF", "Contract private clinics", "#B4281E", "#33474F")
+			IF(ISBLANK([Tile Label]), "#FFFFFF", SWITCH(MAX(mart_lga_decision[action_label]), "Add public clinics", "#FFFFFF", "Contract private clinics", "#7A1F18", "#33474F"))
 			
 			
 			```

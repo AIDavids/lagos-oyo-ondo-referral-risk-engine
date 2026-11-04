@@ -19,12 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "",
-                    "textStyle": {
-                      "fontFamily": "Segoe UI",
-                      "fontSize": "8.2pt",
-                      "color": "#0B2530"
-                    }
+                    "value": ""
                   }
                 ]
               }
