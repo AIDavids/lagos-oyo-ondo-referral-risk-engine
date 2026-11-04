@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Where the gaps are. Click an LGA.",
+                    "value": "Where the gaps are. Each tile is one LGA. Click a tile.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "9.0pt",

@@ -2,236 +2,297 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "030b7605e3b7f5288023",
   "position": {
-    "x": 642,
+    "x": 658,
     "y": 268,
     "z": 1024,
     "height": 172,
-    "width": 186,
+    "width": 150,
     "tabOrder": 1024
   },
   "visual": {
-    "visualType": "shapeMap",
+    "visualType": "pivotTable",
     "query": {
       "queryState": {
-        "Category": {
+        "Rows": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "dim_lga_geo"
+                      "Entity": "dim_lga_tile"
                     }
                   },
-                  "Property": "lgacode"
+                  "Property": "tile_row"
                 }
               },
-              "queryRef": "dim_lga_geo.lgacode",
-              "nativeQueryRef": "lgacode"
+              "queryRef": "dim_lga_tile.tile_row",
+              "nativeQueryRef": "tile_row"
             }
           ]
         },
-        "Series": {
+        "Columns": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "mart_lga_decision"
+                      "Entity": "dim_lga_tile"
                     }
                   },
-                  "Property": "action_label"
+                  "Property": "tile_col"
                 }
               },
-              "queryRef": "mart_lga_decision.action_label",
-              "nativeQueryRef": "action_label"
+              "queryRef": "dim_lga_tile.tile_col",
+              "nativeQueryRef": "tile_col"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Tile Label"
+                }
+              },
+              "queryRef": "_Measures.Tile Label",
+              "nativeQueryRef": "Tile Label"
             }
           ]
         }
       }
     },
     "objects": {
-      "legend": [
+      "values": [
         {
           "properties": {
-            "show": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "7D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Tile Fill"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Measures"
+                        }
+                      },
+                      "Property": "Tile Text Color"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "_Measures.Tile Label"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "rowHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "7D"
+                }
+              }
+            },
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridVerticalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridVerticalWeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
+                }
+              }
+            },
+            "gridHorizontalWeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTotals": [
+        {
+          "properties": {
+            "rowSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "columnSubtotals": {
               "expr": {
                 "Literal": {
                   "Value": "false"
                 }
               }
             }
-          }
-        }
-      ],
-      "general": [
-        {
-          "properties": {}
-        }
-      ],
-      "shape": [
-        {
-          "properties": {
-            "map": {
-              "geoJson": {
-                "type": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'packaged'"
-                    }
-                  }
-                },
-                "name": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'lga_three_states.json'"
-                    }
-                  }
-                },
-                "content": {
-                  "expr": {
-                    "ResourcePackageItem": {
-                      "PackageName": "RegisteredResources",
-                      "PackageType": 1,
-                      "ItemName": "lga_three_states07374230180554653.json"
-                    }
-                  }
-                }
-              }
-            },
-            "projectionEnum": {
-              "expr": {
-                "Literal": {
-                  "Value": "'mercator'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "dataPoint": [
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#B4281E'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "mart_lga_decision"
-                          }
-                        },
-                        "Property": "action_label"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "'Add public clinics'"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E8B4AF'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "mart_lga_decision"
-                          }
-                        },
-                        "Property": "action_label"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "'Contract private clinics'"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#C9D3D8'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "mart_lga_decision"
-                          }
-                        },
-                        "Property": "action_label"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "'No action now'"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
           }
         }
       ]
@@ -308,12 +369,12 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "1cb299104c747687b5c5",
+        "name": "9ae08d0f3036b0d80c32",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "mart_lga_decision"
+                "Entity": "dim_lga_tile"
               }
             },
             "Property": "state_name"
@@ -325,7 +386,7 @@
           "From": [
             {
               "Name": "m",
-              "Entity": "mart_lga_decision",
+              "Entity": "dim_lga_tile",
               "Type": 0
             }
           ],

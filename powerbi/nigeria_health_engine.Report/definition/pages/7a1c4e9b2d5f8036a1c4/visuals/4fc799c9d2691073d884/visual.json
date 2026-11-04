@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
   "name": "4fc799c9d2691073d884",
   "position": {
-    "x": 421,
+    "x": 458,
     "y": 444,
     "z": 1022,
     "height": 64,
-    "width": 214,
+    "width": 180,
     "tabOrder": 1022
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "mart_state_summary.state_name",
-              "nativeQueryRef": "state_name",
-              "active": true
+              "nativeQueryRef": "state_name"
             }
           ]
         },

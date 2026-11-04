@@ -57,6 +57,16 @@
           "name": "lga_three_states07374230180554653.json",
           "path": "lga_three_states07374230180554653.json",
           "type": "ShapeMap"
+        },
+        {
+          "name": "lga_three_states8753646177927223.json",
+          "path": "lga_three_states8753646177927223.json",
+          "type": "ShapeMap"
+        },
+        {
+          "name": "lga_three_states10296587877417251.json",
+          "path": "lga_three_states10296587877417251.json",
+          "type": "ShapeMap"
         }
       ]
     }

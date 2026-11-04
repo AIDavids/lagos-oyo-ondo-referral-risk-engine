@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Red: Add public clinics.  Hatched or outlined: Contract private clinics.  Grey: No action now.",
+                    "value": "Red: Add public clinics.  Pink: Contract private clinics.  Grey: No action now.  Hover a tile for the LGA name.",
                     "textStyle": {
                       "fontFamily": "Segoe UI",
                       "fontSize": "7.5pt",

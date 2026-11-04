@@ -6,7 +6,7 @@
     "y": 444,
     "z": 1019,
     "height": 64,
-    "width": 186,
+    "width": 210,
     "tabOrder": 1019
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "mart_state_summary.state_name",
-              "nativeQueryRef": "state_name",
-              "active": true
+              "nativeQueryRef": "state_name"
             }
           ]
         },
