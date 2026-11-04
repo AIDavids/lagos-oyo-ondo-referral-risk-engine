@@ -1,0 +1,32 @@
+relationship 927aa3e9-5c0a-4fef-c2a8-406dd165f1da
+	fromColumn: fact_facility.lga_id
+	toColumn: mart_lga_decision.lga_id
+
+relationship 1eee6ac0-40a5-04d3-ee1b-9954b1e9c844
+	fromColumn: mart_candidates.lga_id
+	toColumn: mart_lga_decision.lga_id
+
+relationship 6d62f8ca-175d-8baa-dee1-573760072273
+	fromColumn: mart_candidate_cover.lga_id
+	toColumn: mart_lga_decision.lga_id
+
+relationship 31e3bf98-023e-1bc1-5197-e788d8cec184
+	fromColumn: mart_scenarios.lga_id
+	toColumn: mart_lga_decision.lga_id
+
+relationship 10659226-fc3d-7bc6-0ea1-2e5939b20977
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: mart_lga_decision.lga_id
+	toColumn: dim_lga_geo.lga_id
+
+relationship 50da12aa-c223-c7f9-af0a-1953a217a078
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: mart_lga_decision.lga_id
+	toColumn: dim_lga_tile.lga_id
+
+relationship a87a8878-b8fb-ad37-c0c1-0a051d3d58d0
+	fromColumn: mart_lga_decision.state_name
+	toColumn: mart_state_summary.state_name
+

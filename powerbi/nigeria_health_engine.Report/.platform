@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "nigeria_health_engine"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "95319a3d-5798-4dd4-9eb4-95ce77cc0940"
+  }
+}

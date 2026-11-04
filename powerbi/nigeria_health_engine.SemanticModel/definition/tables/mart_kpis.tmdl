@@ -1,0 +1,119 @@
+table mart_kpis
+	lineageTag: 3dc0928c-fefb-49ca-b981-189cacc9fef3
+
+	column lgas_assessed
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f644bd0-5841-4cab-be83-bdee73e8633c
+		summarizeBy: sum
+		sourceColumn: lgas_assessed
+
+		annotation SummarizationSetBy = Automatic
+
+	column lgas_short
+		dataType: int64
+		formatString: 0
+		lineageTag: 2ae73f34-cfe6-4e89-8d4b-033f7dd46f93
+		summarizeBy: sum
+		sourceColumn: lgas_short
+
+		annotation SummarizationSetBy = Automatic
+
+	column lgas_short_if_unknown_public
+		dataType: int64
+		formatString: 0
+		lineageTag: 408229ec-f370-4cf2-b0a7-7d42dcbcd9d3
+		summarizeBy: sum
+		sourceColumn: lgas_short_if_unknown_public
+
+		annotation SummarizationSetBy = Automatic
+
+	column hidden_gaps
+		dataType: int64
+		formatString: 0
+		lineageTag: 83d2b511-1195-4ea9-9740-170a4f31ac7c
+		summarizeBy: sum
+		sourceColumn: hidden_gaps
+
+		annotation SummarizationSetBy = Automatic
+
+	column population_total
+		dataType: double
+		lineageTag: ddfb53c2-98bf-41fa-b4ea-db9a4067a882
+		summarizeBy: sum
+		sourceColumn: population_total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column population_in_short_lgas
+		dataType: double
+		lineageTag: 80942ecb-f876-45d8-afd0-6ea11c2666c8
+		summarizeBy: sum
+		sourceColumn: population_in_short_lgas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pct_population_short
+		dataType: double
+		lineageTag: 5a5ef85a-218e-4721-8265-ccda6c69aa90
+		summarizeBy: sum
+		sourceColumn: pct_population_short
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column clinics_needed
+		dataType: int64
+		formatString: 0
+		lineageTag: 967004f2-5f17-4dca-b6c4-4b8c641cd386
+		summarizeBy: sum
+		sourceColumn: clinics_needed
+
+		annotation SummarizationSetBy = Automatic
+
+	column pct_clinics_beyond_15km
+		dataType: double
+		lineageTag: 5a0f6e4a-20f8-47f2-b221-39a9db5097fe
+		summarizeBy: sum
+		sourceColumn: pct_clinics_beyond_15km
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column median_referral_km
+		dataType: double
+		lineageTag: ddea1936-a74b-484b-a471-5c684e85abe1
+		summarizeBy: sum
+		sourceColumn: median_referral_km
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column unknown_owner_share
+		dataType: double
+		lineageTag: 50dfcfee-453d-4302-905a-0d87e1fbc0ab
+		summarizeBy: sum
+		sourceColumn: unknown_owner_share
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition mart_kpis = m
+		mode: import
+		source =
+				let
+				    Source = GoogleBigQuery.Database([Implementation="2.0"]),
+				    #"nigeria-health-engine_Database" = Source{[Name="nigeria-health-engine",Kind="Database"]}[Data],
+				    gold_Schema = #"nigeria-health-engine_Database"{[Name="gold",Kind="Schema"]}[Data],
+				    mart_kpis_Table = gold_Schema{[Name="mart_kpis",Kind="Table"]}[Data]
+				in
+				    mart_kpis_Table
+

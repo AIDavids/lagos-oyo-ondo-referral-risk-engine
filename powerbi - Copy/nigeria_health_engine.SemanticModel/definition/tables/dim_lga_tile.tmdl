@@ -1,0 +1,66 @@
+table dim_lga_tile
+	lineageTag: ad052b46-7ae0-4a12-9af6-6ce646f1b702
+
+	column lga_id
+		dataType: string
+		lineageTag: fa12467c-ccc8-40cf-a552-44db458f352a
+		summarizeBy: none
+		sourceColumn: lga_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		lineageTag: ddaa4a8f-c71e-4ae0-a1c8-ce22a0b1b04a
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column lga_name
+		dataType: string
+		lineageTag: 65c56df5-9671-408f-9efc-55010640b58c
+		summarizeBy: none
+		sourceColumn: lga_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column lga_label
+		dataType: string
+		lineageTag: c71f2609-10ef-48e9-a853-ba14d20374d7
+		summarizeBy: none
+		sourceColumn: lga_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column tile_col
+		dataType: int64
+		formatString: 0
+		lineageTag: b54d46c4-4378-412a-8510-c78490d285b6
+		summarizeBy: sum
+		sourceColumn: tile_col
+
+		annotation SummarizationSetBy = Automatic
+
+	column tile_row
+		dataType: int64
+		formatString: 0
+		lineageTag: 906b9a22-6ea7-4212-ac8d-16793337a11d
+		summarizeBy: sum
+		sourceColumn: tile_row
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_lga_tile = m
+		mode: import
+		source =
+				let
+				    Source = GoogleBigQuery.Database([Implementation="2.0"]),
+				    #"nigeria-health-engine_Database" = Source{[Name="nigeria-health-engine",Kind="Database"]}[Data],
+				    gold_Schema = #"nigeria-health-engine_Database"{[Name="gold",Kind="Schema"]}[Data],
+				    dim_lga_tile_Table = gold_Schema{[Name="dim_lga_tile",Kind="Table"]}[Data]
+				in
+				    dim_lga_tile_Table
+
+	annotation PBI_ResultType = Table
+

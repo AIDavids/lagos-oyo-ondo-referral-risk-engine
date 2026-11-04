@@ -1,0 +1,137 @@
+table fact_facility
+	lineageTag: 4fd192c2-fa03-4192-88c9-3d7d7b65de87
+
+	column globalid
+		dataType: string
+		lineageTag: 4847edd5-419a-46c5-a7af-2bbe5e4e87f1
+		summarizeBy: none
+		sourceColumn: globalid
+
+		annotation SummarizationSetBy = Automatic
+
+	column lga_id
+		dataType: string
+		lineageTag: b770306c-a1df-44d9-9ffc-26975515f16d
+		summarizeBy: none
+		sourceColumn: lga_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column facility_type_key
+		dataType: int64
+		formatString: 0
+		lineageTag: a2318612-27b5-4164-b2fd-cfd3f525ee11
+		summarizeBy: sum
+		sourceColumn: facility_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column facility_name
+		dataType: string
+		lineageTag: b4a92604-3be5-4547-b152-46b16ce4f13a
+		summarizeBy: none
+		sourceColumn: facility_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ownership
+		dataType: string
+		lineageTag: 3e3bcba8-7761-4c63-b591-095b4937dcc9
+		summarizeBy: none
+		sourceColumn: ownership
+
+		annotation SummarizationSetBy = Automatic
+
+	column ownership_type
+		dataType: string
+		lineageTag: 7d49f5b1-b83a-4a08-8167-220b5f5427be
+		summarizeBy: none
+		sourceColumn: ownership_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column facility_level
+		dataType: string
+		lineageTag: 53f70898-f516-4080-a735-a6c47a03f47b
+		summarizeBy: none
+		sourceColumn: facility_level
+
+		annotation SummarizationSetBy = Automatic
+
+	column facility_level_option
+		dataType: string
+		lineageTag: e2cc0e71-8c5f-4a00-b8eb-bebc01402ca8
+		summarizeBy: none
+		sourceColumn: facility_level_option
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		lineageTag: 8e230b31-b499-44a7-b9f0-0f8ea7e4b0b5
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column longitude
+		dataType: double
+		lineageTag: 8c9c3824-b78f-43ab-a56a-667b18b6af95
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column in_registry
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3604db89-17af-42f9-a444-0c028e1b81f3
+		summarizeBy: none
+		sourceColumn: in_registry
+
+		annotation SummarizationSetBy = Automatic
+
+	column lga_name_conflict
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: def259bc-e433-48cf-baeb-5474d02c0fdf
+		summarizeBy: none
+		sourceColumn: lga_name_conflict
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_km
+		dataType: double
+		lineageTag: c075c8f2-4c14-43d4-b251-9b72596a2d81
+		summarizeBy: sum
+		sourceColumn: referral_km
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column referral_status
+		dataType: string
+		lineageTag: c4d3c28f-46fd-40a5-8765-3eb2106dddf4
+		summarizeBy: none
+		sourceColumn: referral_status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_facility = m
+		mode: import
+		source =
+				let
+				    Source = GoogleBigQuery.Database([Implementation="2.0"]),
+				    #"nigeria-health-engine_Database" = Source{[Name="nigeria-health-engine",Kind="Database"]}[Data],
+				    gold_Schema = #"nigeria-health-engine_Database"{[Name="gold",Kind="Schema"]}[Data],
+				    fact_facility_Table = gold_Schema{[Name="fact_facility",Kind="Table"]}[Data]
+				in
+				    fact_facility_Table
+
+	annotation PBI_ResultType = Table
+

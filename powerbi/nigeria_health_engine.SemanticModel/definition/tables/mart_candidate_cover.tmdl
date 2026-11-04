@@ -1,0 +1,82 @@
+table mart_candidate_cover
+	lineageTag: 564ef8df-3147-43cf-92a0-d86e1ebac7bf
+
+	column lga_id
+		dataType: string
+		lineageTag: 5b70cde1-bc9d-4456-9d68-fbca2fc78262
+		summarizeBy: none
+		sourceColumn: lga_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column lga_name
+		dataType: string
+		lineageTag: df84d01d-0225-4d8a-9531-20845df77b1b
+		summarizeBy: none
+		sourceColumn: lga_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		lineageTag: 6d034161-ae5e-4113-9d6e-b5b04773e6b7
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column candidate_type
+		dataType: string
+		lineageTag: 17ec862b-b4f1-4de0-944f-5c50f2926c76
+		summarizeBy: none
+		sourceColumn: candidate_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column candidates_available
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b96f89a-f34f-47de-be7c-e2f6e285dfe5
+		summarizeBy: sum
+		sourceColumn: candidates_available
+
+		annotation SummarizationSetBy = Automatic
+
+	column clinics_needed
+		dataType: int64
+		formatString: 0
+		lineageTag: 7824b266-207a-42fb-a194-b8f84d45c9ff
+		summarizeBy: sum
+		sourceColumn: clinics_needed
+
+		annotation SummarizationSetBy = Automatic
+
+	column cover_ratio
+		dataType: double
+		lineageTag: 9d97d067-ce08-4b17-a0c0-89b90efe8958
+		summarizeBy: sum
+		sourceColumn: cover_ratio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cover_label
+		dataType: string
+		lineageTag: 431678c7-84a8-4fb1-a5df-aadc679b2dae
+		summarizeBy: none
+		sourceColumn: cover_label
+
+		annotation SummarizationSetBy = Automatic
+
+	partition mart_candidate_cover = m
+		mode: import
+		source =
+				let
+				    Source = GoogleBigQuery.Database([Implementation="2.0"]),
+				    #"nigeria-health-engine_Database" = Source{[Name="nigeria-health-engine",Kind="Database"]}[Data],
+				    gold_Schema = #"nigeria-health-engine_Database"{[Name="gold",Kind="Schema"]}[Data],
+				    mart_candidate_cover_Table = gold_Schema{[Name="mart_candidate_cover",Kind="Table"]}[Data]
+				in
+				    mart_candidate_cover_Table
+

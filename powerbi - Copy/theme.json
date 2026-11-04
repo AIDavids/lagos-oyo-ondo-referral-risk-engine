@@ -1,0 +1,5 @@
+{"name":"PHC Access","dataColors":["#0E6F78","#B4281E","#0B2530","#9CC9CD","#C9D3D8","#8A5A00","#2F5DA8","#7A8C95"],
+"background":"#FFFFFF","foreground":"#0B2530","tableAccent":"#0E6F78",
+"textClasses":{"callout":{"fontSize":28,"fontFace":"Georgia","color":"#0B2530"},"title":{"fontSize":13,"fontFace":"Georgia","color":"#0B2530"},"header":{"fontSize":12,"fontFace":"Segoe UI","color":"#51656F"},"label":{"fontSize":11,"fontFace":"Segoe UI","color":"#51656F"}},
+"visualStyles":{"*":{"*":{"border":[{"show":true,"color":{"solid":{"color":"#D5DEE3"}}}],"background":[{"show":true,"color":{"solid":{"color":"#FFFFFF"}},"transparency":0}]}},
+"page":{"*":{"background":[{"color":{"solid":{"color":"#EEF2F4"}},"transparency":0}]}}}}

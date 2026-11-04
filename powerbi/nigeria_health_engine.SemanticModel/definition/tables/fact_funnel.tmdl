@@ -1,0 +1,42 @@
+table fact_funnel
+	lineageTag: b053c73f-f17a-4e3f-ad93-1608dea8c9b0
+
+	column step
+		dataType: int64
+		formatString: 0
+		lineageTag: a0085eb3-dcc0-4ba0-88a7-b9fab1a893a7
+		summarizeBy: sum
+		sourceColumn: step
+
+		annotation SummarizationSetBy = Automatic
+
+	column stage
+		dataType: string
+		lineageTag: 0f308135-ea39-41b6-b97b-9cf684838122
+		summarizeBy: none
+		sourceColumn: stage
+
+		annotation SummarizationSetBy = Automatic
+
+	column n
+		dataType: int64
+		formatString: 0
+		lineageTag: ea2fdebd-fc5d-47ae-acbf-1b9427820e70
+		summarizeBy: sum
+		sourceColumn: n
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_funnel = m
+		mode: import
+		source =
+				let
+				    Source = GoogleBigQuery.Database([Implementation="2.0"]),
+				    #"nigeria-health-engine_Database" = Source{[Name="nigeria-health-engine",Kind="Database"]}[Data],
+				    gold_Schema = #"nigeria-health-engine_Database"{[Name="gold",Kind="Schema"]}[Data],
+				    fact_funnel_Table = gold_Schema{[Name="fact_funnel",Kind="Table"]}[Data]
+				in
+				    fact_funnel_Table
+
+	annotation PBI_ResultType = Table
+

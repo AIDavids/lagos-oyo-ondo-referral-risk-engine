@@ -1,6 +1,5 @@
--- Layer: GOLD (dimension). Why: one row per LGA with the official code (key for the Power BI shape map),
--- a centroid (for the phone dot map) and a 3-letter label. Codes can repeat; use the tooltip for the full name.
--- lgacode is cast to text so it matches the TopoJSON property exactly (31018 as text, never as a number).
+-- Layer: GOLD (dimension). Why: one row per LGA with the official code (key for the Power BI maps),
+-- a centroid and a 3-letter label. lgacode is cast to text so it matches map files exactly.
 CREATE OR REPLACE TABLE gold.dim_lga_geo AS
 SELECT d.lga_id, CAST(d.lgacode AS STRING) AS lgacode, d.lga_name, d.state_name,
        ST_X(ST_CENTROID(l.geog)) AS centroid_lon,
@@ -8,10 +7,82 @@ SELECT d.lga_id, CAST(d.lgacode AS STRING) AS lgacode, d.lga_name, d.state_name,
        UPPER(SUBSTR(REGEXP_REPLACE(d.lga_name, r'[^A-Za-z]', ''), 1, 3)) AS lga_label
 FROM gold.dim_lga d JOIN silver.lga_clean l ON l.lga_id = d.lga_id;
 
--- Phone boxes: one box per LGA in an alphabetical grid, 5 boxes per row, one grid per state.
--- (Geography is not preserved on purpose: the desktop page has the real map. Boxes are easy to tap.)
+-- Tile map layout: one box per LGA. Positions keep rough geography (north at the top, coast at the bottom):
+-- each state's LGA centroids were assigned to the nearest free cell of a small grid (scripts/make_tile_layout.py logic).
+-- tile_label is a short unique name shown inside the box (the full name is in the tooltip).
 CREATE OR REPLACE TABLE gold.dim_lga_tile AS
-SELECT lga_id, state_name, lga_name, lga_label,
-       MOD(ROW_NUMBER() OVER (PARTITION BY state_name ORDER BY lga_name) - 1, 5) + 1 AS tile_col,
-       DIV(ROW_NUMBER() OVER (PARTITION BY state_name ORDER BY lga_name) - 1, 5) + 1 AS tile_row
-FROM gold.dim_lga_geo;
+SELECT g.lga_id, g.state_name, g.lga_name, g.lga_label, t.tile_label, t.tile_col, t.tile_row
+FROM gold.dim_lga_geo g
+JOIN UNNEST([
+  STRUCT('31018' AS lgacode, 'IWA' AS tile_label, 1 AS tile_col, 4 AS tile_row),
+  STRUCT('31013' AS lgacode, 'IBARN' AS tile_label, 1 AS tile_col, 5 AS tile_row),
+  STRUCT('31011' AS lgacode, 'IBC' AS tile_label, 1 AS tile_col, 6 AS tile_row),
+  STRUCT('31016' AS lgacode, 'ISE' AS tile_label, 3 AS tile_col, 3 AS tile_row),
+  STRUCT('31017' AS lgacode, 'ITE' AS tile_label, 1 AS tile_col, 3 AS tile_row),
+  STRUCT('31019' AS lgacode, 'KAJ' AS tile_label, 2 AS tile_col, 3 AS tile_row),
+  STRUCT('31020' AS lgacode, 'LAG' AS tile_label, 6 AS tile_col, 5 AS tile_row),
+  STRUCT('31033' AS lgacode, 'SUR' AS tile_label, 6 AS tile_col, 3 AS tile_row),
+  STRUCT('31028' AS lgacode, 'ORI' AS tile_label, 5 AS tile_col, 2 AS tile_row),
+  STRUCT('31027' AS lgacode, 'ORE' AS tile_label, 3 AS tile_col, 1 AS tile_row),
+  STRUCT('31032' AS lgacode, 'SAW' AS tile_label, 1 AS tile_col, 2 AS tile_row),
+  STRUCT('31007' AS lgacode, 'IBNE' AS tile_label, 5 AS tile_col, 5 AS tile_row),
+  STRUCT('31012' AS lgacode, 'IBE' AS tile_label, 2 AS tile_col, 4 AS tile_row),
+  STRUCT('31024' AS lgacode, 'OLO' AS tile_label, 5 AS tile_col, 1 AS tile_row),
+  STRUCT('31030' AS lgacode, 'OYW' AS tile_label, 4 AS tile_col, 3 AS tile_row),
+  STRUCT('31005' AS lgacode, 'EGB' AS tile_label, 6 AS tile_col, 6 AS tile_row),
+  STRUCT('31026' AS lgacode, 'ONA' AS tile_label, 5 AS tile_col, 6 AS tile_row),
+  STRUCT('31004' AS lgacode, 'ATIS' AS tile_label, 2 AS tile_col, 2 AS tile_row),
+  STRUCT('31015' AS lgacode, 'IRE' AS tile_label, 4 AS tile_col, 1 AS tile_row),
+  STRUCT('31025' AS lgacode, 'OLU' AS tile_label, 3 AS tile_col, 6 AS tile_row),
+  STRUCT('31031' AS lgacode, 'SAE' AS tile_label, 3 AS tile_col, 2 AS tile_row),
+  STRUCT('31029' AS lgacode, 'OYE' AS tile_label, 5 AS tile_col, 4 AS tile_row),
+  STRUCT('31023' AS lgacode, 'OGO' AS tile_label, 6 AS tile_col, 4 AS tile_row),
+  STRUCT('31003' AS lgacode, 'ATIB' AS tile_label, 4 AS tile_col, 2 AS tile_row),
+  STRUCT('31022' AS lgacode, 'OGS' AS tile_label, 5 AS tile_col, 3 AS tile_row),
+  STRUCT('31001' AS lgacode, 'AFI' AS tile_label, 3 AS tile_col, 4 AS tile_row),
+  STRUCT('31021' AS lgacode, 'OGN' AS tile_label, 6 AS tile_col, 2 AS tile_row),
+  STRUCT('31006' AS lgacode, 'IBADN' AS tile_label, 4 AS tile_col, 5 AS tile_row),
+  STRUCT('31002' AS lgacode, 'AKI' AS tile_label, 4 AS tile_col, 4 AS tile_row),
+  STRUCT('31014' AS lgacode, 'IDO' AS tile_label, 2 AS tile_col, 5 AS tile_row),
+  STRUCT('31008' AS lgacode, 'IBNW' AS tile_label, 3 AS tile_col, 5 AS tile_row),
+  STRUCT('31010' AS lgacode, 'IBSW' AS tile_label, 2 AS tile_col, 6 AS tile_row),
+  STRUCT('31009' AS lgacode, 'IBSE' AS tile_label, 4 AS tile_col, 6 AS tile_row),
+  STRUCT('29010' AS lgacode, 'ILA' AS tile_label, 1 AS tile_col, 5 AS tile_row),
+  STRUCT('29007' AS lgacode, 'ESO' AS tile_label, 2 AS tile_col, 5 AS tile_row),
+  STRUCT('29014' AS lgacode, 'OKI' AS tile_label, 1 AS tile_col, 4 AS tile_row),
+  STRUCT('29015' AS lgacode, 'ONE' AS tile_label, 2 AS tile_col, 3 AS tile_row),
+  STRUCT('29005' AS lgacode, 'AKN' AS tile_label, 3 AS tile_col, 1 AS tile_row),
+  STRUCT('29011' AS lgacode, 'ILOO' AS tile_label, 2 AS tile_col, 2 AS tile_row),
+  STRUCT('29016' AS lgacode, 'ONW' AS tile_label, 1 AS tile_col, 2 AS tile_row),
+  STRUCT('29006' AS lgacode, 'AKS' AS tile_label, 3 AS tile_col, 2 AS tile_row),
+  STRUCT('29008' AS lgacode, 'IDA' AS tile_label, 3 AS tile_col, 3 AS tile_row),
+  STRUCT('29003' AS lgacode, 'AKSE' AS tile_label, 5 AS tile_col, 2 AS tile_row),
+  STRUCT('29009' AS lgacode, 'IFE' AS tile_label, 2 AS tile_col, 1 AS tile_row),
+  STRUCT('29013' AS lgacode, 'ODI' AS tile_label, 1 AS tile_col, 3 AS tile_row),
+  STRUCT('29017' AS lgacode, 'OSE' AS tile_label, 5 AS tile_col, 3 AS tile_row),
+  STRUCT('29002' AS lgacode, 'AKNW' AS tile_label, 4 AS tile_col, 1 AS tile_row),
+  STRUCT('29004' AS lgacode, 'AKSW' AS tile_label, 4 AS tile_col, 2 AS tile_row),
+  STRUCT('29012' AS lgacode, 'IRE' AS tile_label, 2 AS tile_col, 4 AS tile_row),
+  STRUCT('29018' AS lgacode, 'OWO' AS tile_label, 4 AS tile_col, 3 AS tile_row),
+  STRUCT('29001' AS lgacode, 'AKNE' AS tile_label, 5 AS tile_col, 1 AS tile_row),
+  STRUCT('25019' AS lgacode, 'LAM' AS tile_label, 5 AS tile_col, 3 AS tile_row),
+  STRUCT('25020' AS lgacode, 'LAI' AS tile_label, 5 AS tile_col, 4 AS tile_row),
+  STRUCT('25005' AS lgacode, 'APA' AS tile_label, 4 AS tile_col, 4 AS tile_row),
+  STRUCT('25014' AS lgacode, 'MUS' AS tile_label, 4 AS tile_col, 3 AS tile_row),
+  STRUCT('25018' AS lgacode, 'SUR' AS tile_label, 3 AS tile_col, 3 AS tile_row),
+  STRUCT('25017' AS lgacode, 'SHO' AS tile_label, 4 AS tile_col, 2 AS tile_row),
+  STRUCT('25001' AS lgacode, 'AGE' AS tile_label, 3 AS tile_col, 1 AS tile_row),
+  STRUCT('25016' AS lgacode, 'OSI' AS tile_label, 3 AS tile_col, 2 AS tile_row),
+  STRUCT('25002' AS lgacode, 'AJI' AS tile_label, 3 AS tile_col, 4 AS tile_row),
+  STRUCT('25007' AS lgacode, 'EPE' AS tile_label, 7 AS tile_col, 2 AS tile_row),
+  STRUCT('25004' AS lgacode, 'AMO' AS tile_label, 2 AS tile_col, 4 AS tile_row),
+  STRUCT('25009' AS lgacode, 'IBL' AS tile_label, 7 AS tile_col, 4 AS tile_row),
+  STRUCT('25008' AS lgacode, 'ETO' AS tile_label, 6 AS tile_col, 4 AS tile_row),
+  STRUCT('25013' AS lgacode, 'KOS' AS tile_label, 5 AS tile_col, 2 AS tile_row),
+  STRUCT('25003' AS lgacode, 'ALI' AS tile_label, 2 AS tile_col, 2 AS tile_row),
+  STRUCT('25010' AS lgacode, 'IFI' AS tile_label, 2 AS tile_col, 1 AS tile_row),
+  STRUCT('25012' AS lgacode, 'IKO' AS tile_label, 5 AS tile_col, 1 AS tile_row),
+  STRUCT('25011' AS lgacode, 'IKE' AS tile_label, 4 AS tile_col, 1 AS tile_row),
+  STRUCT('25015' AS lgacode, 'OJO' AS tile_label, 2 AS tile_col, 3 AS tile_row),
+  STRUCT('25006' AS lgacode, 'BAD' AS tile_label, 1 AS tile_col, 4 AS tile_row)
+]) AS t ON g.lgacode = t.lgacode;
