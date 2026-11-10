@@ -15,5 +15,4 @@ SQL is in `sql/`, numbered in run order. Decisions are in `docs/adr/`. Results a
 ## Limitations
 Straight-line distance is not travel time; population is a modelled 2025 estimate; registry presence does not prove a facility is functional; thresholds are policy assumptions (sensitivity is shown); source data is not validated by government.
 
-## Note on tools
-Built with AI assistance (Claude) for code drafting; all decisions, definitions and results are documented in the ADRs and were reviewed by the author.
+
