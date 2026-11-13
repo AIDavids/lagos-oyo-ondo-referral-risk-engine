@@ -1,0 +1,262 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "32d19f2106798977bd02",
+  "position": {
+    "x": 778,
+    "y": 144,
+    "z": 1013,
+    "height": 366,
+    "width": 474,
+    "tabOrder": 1013
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_lga_decision"
+                    }
+                  },
+                  "Property": "lga_id"
+                }
+              },
+              "queryRef": "mart_lga_decision.lga_id",
+              "nativeQueryRef": "lga_id"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_lga_decision"
+                    }
+                  },
+                  "Property": "lga_name"
+                }
+              },
+              "queryRef": "mart_lga_decision.lga_name",
+              "nativeQueryRef": "lga_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_lga_decision"
+                    }
+                  },
+                  "Property": "severity_rank"
+                }
+              },
+              "queryRef": "mart_lga_decision.severity_rank",
+              "nativeQueryRef": "severity_rank"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_lga_decision"
+                    }
+                  },
+                  "Property": "action_low"
+                }
+              },
+              "queryRef": "mart_lga_decision.action_low",
+              "nativeQueryRef": "action_low"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_scenarios"
+                    }
+                  },
+                  "Property": "scenario"
+                }
+              },
+              "queryRef": "mart_scenarios.scenario",
+              "nativeQueryRef": "scenario"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_scenarios"
+                    }
+                  },
+                  "Property": "owner_view"
+                }
+              },
+              "queryRef": "mart_scenarios.owner_view",
+              "nativeQueryRef": "owner_view"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_scenarios"
+                    }
+                  },
+                  "Property": "benchmark"
+                }
+              },
+              "queryRef": "mart_scenarios.benchmark",
+              "nativeQueryRef": "benchmark"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_scenarios"
+                    }
+                  },
+                  "Property": "beyond_km"
+                }
+              },
+              "queryRef": "mart_scenarios.beyond_km",
+              "nativeQueryRef": "beyond_km"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "mart_scenarios"
+                    }
+                  },
+                  "Property": "action"
+                }
+              },
+              "queryRef": "mart_scenarios.action",
+              "nativeQueryRef": "action"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "vega": [
+        {
+          "properties": {
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"background\": null,\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"transform\": [\n    {\n      \"filter\": \"datum.severity_rank != null && datum.severity_rank <= 12\"\n    },\n    {\n      \"calculate\": \"datum.owner_view === ''confirmed'' ? ''Owners: confirmed only'' : ''Owners: unknown counted as public''\",\n      \"as\": \"group\"\n    },\n    {\n      \"calculate\": \"(datum.benchmark / 1000) + ''k \\u00b7 '' + datum.beyond_km + '' km''\",\n      \"as\": \"setting\"\n    },\n    {\n      \"calculate\": \"datum.action === datum.action_low ? ''Same action'' : ''Action changes''\",\n      \"as\": \"res\"\n    }\n  ],\n  \"facet\": {\n    \"column\": {\n      \"field\": \"group\",\n      \"type\": \"nominal\",\n      \"sort\": [\n        \"Owners: confirmed only\",\n        \"Owners: unknown counted as public\"\n      ],\n      \"title\": null,\n      \"header\": {\n        \"labelFont\": \"Segoe UI\",\n        \"labelFontSize\": 11,\n        \"labelFontWeight\": \"bold\",\n        \"labelOrient\": \"top\",\n        \"labelPadding\": 8\n      }\n    }\n  },\n  \"spec\": {\n    \"width\": {\n      \"step\": 17\n    },\n    \"height\": {\n      \"step\": 24\n    },\n    \"mark\": {\n      \"type\": \"rect\",\n      \"stroke\": \"#FFFFFF\",\n      \"strokeWidth\": 2,\n      \"cursor\": \"pointer\"\n    },\n    \"encoding\": {\n      \"x\": {\n        \"field\": \"setting\",\n        \"type\": \"ordinal\",\n        \"sort\": [\n          \"10k \\u00b7 10 km\",\n          \"10k \\u00b7 15 km\",\n          \"10k \\u00b7 20 km\",\n          \"20k \\u00b7 10 km\",\n          \"20k \\u00b7 15 km\",\n          \"20k \\u00b7 20 km\",\n          \"30k \\u00b7 10 km\",\n          \"30k \\u00b7 15 km\",\n          \"30k \\u00b7 20 km\"\n        ],\n        \"axis\": {\n          \"orient\": \"bottom\",\n          \"labelAngle\": -60,\n          \"title\": null,\n          \"labelFont\": \"Segoe UI\",\n          \"labelFontSize\": 9\n        }\n      },\n      \"y\": {\n        \"field\": \"lga_name\",\n        \"type\": \"nominal\",\n        \"sort\": {\n          \"field\": \"severity_rank\",\n          \"op\": \"min\"\n        },\n        \"axis\": {\n          \"title\": null,\n          \"labelFont\": \"Segoe UI\",\n          \"labelFontSize\": 11\n        }\n      },\n      \"color\": {\n        \"field\": \"res\",\n        \"type\": \"nominal\",\n        \"scale\": {\n          \"domain\": [\n            \"Same action\",\n            \"Action changes\"\n          ],\n          \"range\": [\n            \"#0E6F78\",\n            \"#E8B4AF\"\n          ]\n        },\n        \"legend\": {\n          \"orient\": \"bottom\",\n          \"title\": null,\n          \"labelFont\": \"Segoe UI\"\n        }\n      },\n      \"tooltip\": [\n        {\n          \"field\": \"lga_name\",\n          \"title\": \"LGA\"\n        },\n        {\n          \"field\": \"group\",\n          \"title\": \"Owners\"\n        },\n        {\n          \"field\": \"setting\",\n          \"title\": \"Target \\u00b7 hospital limit\"\n        },\n        {\n          \"field\": \"action\",\n          \"title\": \"Action in this setting\"\n        },\n        {\n          \"field\": \"action_low\",\n          \"title\": \"Base action\"\n        }\n      ]\n    }\n  },\n  \"config\": {\n    \"view\": {\n      \"stroke\": null\n    }\n  }\n}'"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"view\": {\n    \"stroke\": \"transparent\"\n  },\n  \"font\": \"Segoe UI, wf_segoe-ui_normal, helvetica, arial, sans-serif\",\n  \"arc\": {},\n  \"area\": {\n    \"line\": true,\n    \"opacity\": 0.6\n  },\n  \"bar\": {},\n  \"line\": {\n    \"strokeWidth\": 3,\n    \"strokeCap\": \"round\",\n    \"strokeJoin\": \"round\"\n  },\n  \"point\": {\n    \"filled\": true,\n    \"size\": 75\n  },\n  \"rect\": {},\n  \"text\": {\n    \"font\": \"Segoe UI, wf_segoe-ui_normal, helvetica, arial, sans-serif\",\n    \"fontSize\": 12,\n    \"fill\": \"#605E5C\"\n  },\n  \"axis\": {\n    \"ticks\": false,\n    \"grid\": false,\n    \"domain\": false,\n    \"labelColor\": \"#605E5C\",\n    \"labelFontSize\": 12,\n    \"titleFont\": \"din, wf_standard-font, helvetica, arial, sans-serif\",\n    \"titleColor\": \"#0B2530\",\n    \"titleFontSize\": 16,\n    \"titleFontWeight\": \"normal\"\n  },\n  \"axisQuantitative\": {\n    \"tickCount\": 3,\n    \"grid\": true,\n    \"gridColor\": \"#C8C6C4\",\n    \"gridDash\": [\n      1,\n      5\n    ],\n    \"labelFlush\": false\n  },\n  \"axisX\": {\n    \"labelPadding\": 5\n  },\n  \"axisY\": {\n    \"labelPadding\": 10\n  },\n  \"header\": {\n    \"titleFont\": \"din, wf_standard-font, helvetica, arial, sans-serif\",\n    \"titleFontSize\": 16,\n    \"titleColor\": \"#0B2530\",\n    \"labelFont\": \"Segoe UI, wf_segoe-ui_normal, helvetica, arial, sans-serif\",\n    \"labelFontSize\": 13.333333333333332,\n    \"labelColor\": \"#605E5C\"\n  },\n  \"legend\": {\n    \"titleFont\": \"Segoe UI, wf_segoe-ui_normal, helvetica, arial, sans-serif\",\n    \"titleFontWeight\": \"bold\",\n    \"titleColor\": \"#605E5C\",\n    \"labelFont\": \"Segoe UI, wf_segoe-ui_normal, helvetica, arial, sans-serif\",\n    \"labelFontSize\": 13.333333333333332,\n    \"labelColor\": \"#605E5C\",\n    \"symbolType\": \"circle\",\n    \"symbolSize\": 75\n  }\n}'"
+                }
+              }
+            },
+            "enableTooltips": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableContextMenu": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableContextMenuSelector": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableHighlight": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "enableSelection": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "selectionMaxDataPoints": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
+            },
+            "selectionMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'simple'"
+                }
+              }
+            },
+            "version": {
+              "expr": {
+                "Literal": {
+                  "Value": "'6.4.3'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "stateManagement": [
+        {
+          "properties": {
+            "denebMetaVersion": {
+              "expr": {
+                "Literal": {
+                  "Value": "'2'"
+                }
+              }
+            },
+            "viewportHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "366D"
+                }
+              }
+            },
+            "viewportWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "474D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

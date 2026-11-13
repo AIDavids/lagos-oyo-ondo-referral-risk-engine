@@ -37,7 +37,7 @@ table dim_lga_tile
 		dataType: int64
 		formatString: 0
 		lineageTag: b54d46c4-4378-412a-8510-c78490d285b6
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: tile_col
 
 		annotation SummarizationSetBy = Automatic
@@ -46,7 +46,7 @@ table dim_lga_tile
 		dataType: int64
 		formatString: 0
 		lineageTag: 906b9a22-6ea7-4212-ac8d-16793337a11d
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: tile_row
 
 		annotation SummarizationSetBy = Automatic

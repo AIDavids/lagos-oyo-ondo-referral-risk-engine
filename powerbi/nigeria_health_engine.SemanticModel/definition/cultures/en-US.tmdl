@@ -2,8 +2,430 @@ cultureInfo en-US
 
 	linguisticMetadata =
 			{
-			  "Version": "1.0.0",
-			  "Language": "en-US"
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "mart_state_summary.state_name": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_state_summary",
+			          "ConceptualProperty": "state_name"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "State": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_state_summary.lgas_short": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_state_summary",
+			          "ConceptualProperty": "lgas_short"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "LGAs short": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_state_summary.people_per_public_clinic": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_state_summary",
+			          "ConceptualProperty": "people_per_public_clinic"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "People per clinic": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_state_summary.best_served_lga": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_state_summary",
+			          "ConceptualProperty": "best_served_lga"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Best served": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_state_summary.most_in_need_lga": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_state_summary",
+			          "ConceptualProperty": "most_in_need_lga"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Most in need": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_lga_decision.severity_rank": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_lga_decision",
+			          "ConceptualProperty": "severity_rank"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_lga_decision.lga_name": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_lga_decision",
+			          "ConceptualProperty": "lga_name"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "LGA": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_lga_decision.state_name": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_lga_decision",
+			          "ConceptualProperty": "state_name"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "State": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_lga_decision.action_label": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_lga_decision",
+			          "ConceptualProperty": "action_label"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Action": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_lga_decision.pop_per_public_phc": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_lga_decision",
+			          "ConceptualProperty": "pop_per_public_phc"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "People per clinic": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_lga_decision.phc_deficit": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_lga_decision",
+			          "ConceptualProperty": "phc_deficit"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clinics needed": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_lga_decision.confidence": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_lga_decision",
+			          "ConceptualProperty": "confidence"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Confidence": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_candidates.candidate_rank": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_candidates",
+			          "ConceptualProperty": "candidate_rank"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_candidates.facility_name": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_candidates",
+			          "ConceptualProperty": "facility_name"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Clinic": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_candidates.ward": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_candidates",
+			          "ConceptualProperty": "ward"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ward": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_candidates.ownership_type": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_candidates",
+			          "ConceptualProperty": "ownership_type"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Type": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_candidates.km_to_nearest_public": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_candidates",
+			          "ConceptualProperty": "km_to_nearest_public"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Km to public clinic": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_scenarios.owner_view": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_scenarios",
+			          "ConceptualProperty": "owner_view"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Owners": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_scenarios.beyond_km": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_scenarios",
+			          "ConceptualProperty": "beyond_km"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Limit (km)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mart_scenarios.action": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "mart_scenarios",
+			          "ConceptualProperty": "action"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Action": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
 			}
 		contentType: json
 

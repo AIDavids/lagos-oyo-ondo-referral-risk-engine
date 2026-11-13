@@ -21,8 +21,6 @@ relationship 10659226-fc3d-7bc6-0ea1-2e5939b20977
 	toColumn: dim_lga_geo.lga_id
 
 relationship 50da12aa-c223-c7f9-af0a-1953a217a078
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
 	fromColumn: mart_lga_decision.lga_id
 	toColumn: dim_lga_tile.lga_id
 

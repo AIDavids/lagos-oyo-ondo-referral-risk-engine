@@ -276,6 +276,197 @@ table _Measures
 			```
 		lineageTag: 349ce04c-394b-4608-9f7b-955ed7b7311f
 
+	measure 'Hidden Gaps Display' = ```
+			VAR n = [LGAs Assessed] VAR s = [LGAs Short] VAR h = [Hidden Gaps] RETURN SWITCH(TRUE(), n = 0, "-", n = 1, IF(s = 0, "Not short", IF(h = 1, "Yes", "No")), s = 0, "None", FORMAT(h, "0") & " of " & FORMAT(s, "0"))
+			  
+			```
+		lineageTag: 5760de82-fd09-4ae9-bc8e-b57ee6fa0440
+
+	measure 'Tile In Scope' = ```
+			IF(ISBLANK(MAX(mart_lga_decision[lga_id])), 0, 1)
+			  
+			```
+		formatString: 0
+		lineageTag: 85ed77ec-40e8-4f3e-986f-9b43747eb1a3
+
+	measure 'Tile Action' = ```
+			MAX(mart_lga_decision[action_label])
+			  
+			```
+		lineageTag: a9ad192e-9e82-4cf8-b69b-15dfbe391efe
+
+	measure 'Tile People Per Clinic' = ```
+			MAX(mart_lga_decision[pop_per_public_phc])
+			  
+			```
+		lineageTag: e2f34746-0a8b-42c4-b112-7a0f8d651c08
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Tile Clinics Needed' = ```
+			MAX(mart_lga_decision[phc_deficit])
+			  
+			```
+		formatString: 0
+		lineageTag: 3464ffad-de45-4110-8c5f-cea86a5b5c0b
+
+	measure 'Tile Confidence' = ```
+			MAX(mart_lga_decision[confidence])
+			  
+			```
+		lineageTag: 8bd45768-2173-40a9-9d65-bdc08235fffa
+
+	measure 'Contract Candidates Available' = ```
+			COALESCE(CALCULATE(SUM(mart_candidate_cover[candidates_available]), mart_candidate_cover[candidate_type] = "contract_private"), 0)
+			  
+			```
+		formatString: 0
+		lineageTag: 1e81354a-d906-43cc-98a7-0ce3870e8739
+
+	measure 'Primary Clinics Count' = ```
+			COALESCE(CALCULATE(COUNTROWS(fact_facility), fact_facility[facility_level] = "Primary"), 0)
+			  
+			```
+		formatString: 0
+		lineageTag: 6a36c672-6e97-4bf5-9a0b-6f3f4dec08e5
+
+	measure 'PPC Rank Text' = ```
+			VAR sel = [Selected People Per Clinic] RETURN "#" & FORMAT(COUNTROWS(FILTER(ALL(mart_lga_decision), mart_lga_decision[pop_per_public_phc] > sel)) + 1, "0") & " of " & FORMAT(COUNTROWS(ALL(mart_lga_decision)), "0")
+			  
+			```
+		lineageTag: 242109db-3774-462d-a46d-9da3353b140f
+
+	measure 'Missing Rank Text' = ```
+			VAR sel = [Selected Clinics Missing] RETURN "#" & FORMAT(COUNTROWS(FILTER(ALL(mart_lga_decision), mart_lga_decision[phc_deficit] > sel)) + 1, "0") & " of " & FORMAT(COUNTROWS(ALL(mart_lga_decision)), "0")
+			  
+			```
+		lineageTag: 7d447440-6c65-4a94-90d6-3c51cc0b2e06
+
+	measure 'Rule 1 Text' = ```
+			VAR lid = [Selected LGA ID] VAR ppc = [Selected People Per Clinic] VAR far = CALCULATE(MAX(mart_lga_decision[pct_phc_beyond_15km]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = lid) RETURN "1. Over 15,000 people per clinic and half or more of clinics 15+ km from a hospital: " & IF(ppc > 15000 && far >= 0.5, "YES", "no") & " (" & FORMAT(ppc, "#,0") & " per clinic, " & FORMAT(far, "0%") & " far)"
+			  
+			```
+		lineageTag: eef5914a-c6e0-403b-b97e-9fe4b9d5ecc4
+
+	measure 'Rule 2 Text' = ```
+			VAR ppc = [Selected People Per Clinic] VAR med = [Selected Median Km] RETURN "2. Up to 10,000 per clinic but median hospital distance over 20 km: " & IF(ppc <= 10000 && med > 20, "YES", "no") & " (median " & FORMAT(med, "0.0") & " km)"
+			  
+			```
+		lineageTag: 98f97fb9-4cc5-4ce7-be8a-a1c65e6ee632
+
+	measure 'Rule 3 Text' = ```
+			VAR lid = [Selected LGA ID] VAR ppc = [Selected People Per Clinic] VAR priv = CALCULATE(MAX(mart_lga_decision[private_share]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = lid) RETURN "3. Over 12,000 per clinic and 65% or more of clinics private: " & IF(ppc > 12000 && priv >= 0.65, "YES", "no") & " (" & FORMAT(priv, "0%") & " private)"
+			  
+			```
+		lineageTag: dd8c5f8a-359b-42db-b01f-0b46c9456afe
+
+	measure 'Rule 4 Text' = ```
+			VAR ppc = [Selected People Per Clinic] RETURN "4. Over 10,000 people per public clinic: " & IF(ppc > 10000, "YES", "no")
+			  
+			```
+		lineageTag: ae8467f1-95e1-42fb-9b36-be213a290c6c
+
+	measure 'Result Text' = ```
+			"Result: " & [Selected Action] & ". The first rule that fits wins."
+			
+			
+			```
+		lineageTag: 9d477561-010b-466a-a3cd-85b25b983ca7
+
+	measure 'People KPI Title' = ```
+			IF([LGAs Assessed] = 1, "People living in this LGA", "People living in short LGAs")
+			  
+			```
+		lineageTag: 8e58a1d1-82f5-41a2-8360-d04e0129573c
+
+	measure 'People KPI Text' = ```
+			VAR n = [LGAs Assessed] VAR s = [LGAs Short] VAR v = IF(n = 1, SUM(mart_lga_decision[population_2025]), [People In Short LGAs]) RETURN SWITCH(TRUE(), n = 0, "-", n > 1 && s = 0, "None", v >= 1000000, FORMAT(v / 1000000, "0.00") & " million", FORMAT(v, "#,0"))
+			  
+			```
+		lineageTag: e25ba6c7-97bb-49dc-8a1e-8bd2fb2984ff
+
+	measure 'Clinics Needed Text' = ```
+			VAR n = [LGAs Assessed] VAR c = [Clinics Needed] RETURN IF(c = 0, IF(n = 1, "None: enough clinics", "None needed"), FORMAT(c, "#,0"))
+			  
+			```
+		lineageTag: d85758b7-d7c9-448e-98be-d26e23bcf280
+
+	measure 'Hidden Gaps Title' = ```
+			IF([LGAs Assessed] = 1, "Hidden gap? (looks fine if private clinics are counted)", "Hidden gaps (short LGAs that look fine if private clinics are counted)")
+			  
+			```
+		lineageTag: f2823b46-b1fa-4612-a340-52e14eac55be
+
+	measure 'Beyond15 Scope Text' = ```
+			VAR tot = CALCULATE(COUNTROWS(fact_facility), fact_facility[facility_level] = "Primary") VAR far = CALCULATE(COUNTROWS(fact_facility), fact_facility[facility_level] = "Primary", fact_facility[referral_km] > 15) RETURN IF(tot = 0, "-", FORMAT(DIVIDE(far, tot), "0.0%"))
+			  
+			```
+		lineageTag: f4d88568-d615-47f9-8fd2-4fb26c4019ad
+
+	measure 'Scope Line' = ```
+			VAR total = CALCULATE(COUNTROWS(mart_lga_decision), ALL(mart_lga_decision), ALL(mart_state_summary)) VAR n = [LGAs Assessed] RETURN SWITCH(TRUE(), n = 1, "Showing one LGA: " & [Selected LGA Title] & ". Click the same hexagon again to clear.", n < total && ISFILTERED(mart_lga_decision[state_name]), "Showing: " & CONCATENATEX(VALUES(mart_lga_decision[state_name]), mart_lga_decision[state_name], ", ") & ". Use the State filter on the left to change.", n < total, "Showing " & FORMAT(n, "0") & " selected LGAs.", "Showing all three states. Range: " & FORMAT([Range Low], "0") & " to " & FORMAT([LGAs Short], "0") & " LGAs are short if unknown owners count as public.")
+			
+			
+			```
+		lineageTag: 3c2c15d0-0d59-49a2-995b-cd2309d0f27b
+
+	measure 'Beyond15 Display' = ```
+			VAR tot = COALESCE(CALCULATE(COUNTROWS(fact_facility), fact_facility[facility_level] = "Primary"), 0) VAR far = COALESCE(CALCULATE(COUNTROWS(fact_facility), fact_facility[facility_level] = "Primary", fact_facility[referral_km] > 15), 0) RETURN IF(tot = 0, "No clinics listed", FORMAT(DIVIDE(far, tot), "0.0%"))
+			  
+			```
+		lineageTag: bdde559a-b11a-49a1-8cf6-ac8eee00e0e6
+
+	measure 'Profile Context Line' = ```
+			VAR lid = [Selected LGA ID] VAR pop = CALCULATE(MAX(mart_lga_decision[population_2025]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = lid) VAR dens = CALCULATE(MAX(mart_lga_decision[pop_density_km2]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = lid) RETURN "Population " & FORMAT(pop, "#,0") & " · " & FORMAT(DIVIDE(pop, dens), "#,0") & " km² · " & FORMAT(dens, "#,0") & " people per km²"
+			
+			
+			```
+		lineageTag: 67daa694-1c1b-493b-acb5-e5bc3303d311
+
+	measure 'Rule 1 Short' = ```
+			VAR lid = [Selected LGA ID] VAR ppc = [Selected People Per Clinic] VAR far = COALESCE(CALCULATE(MAX(mart_lga_decision[pct_phc_beyond_15km]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = lid), 0) RETURN "1. Critical gap? " & FORMAT(ppc, "#,0") & " per clinic, " & FORMAT(far, "0%") & " far: " & IF(ppc > 15000 && far >= 0.5, "YES", "no")
+			  
+			```
+		lineageTag: b6827ac5-a84d-45a0-b008-45c387eda715
+
+	measure 'Rule 2 Short' = ```
+			VAR ppc = [Selected People Per Clinic] VAR med = [Selected Median Km] RETURN "2. Ambulance gap? Median " & FORMAT(med, "0.0") & " km to a hospital: " & IF(ppc <= 10000 && med > 20, "YES", "no")
+			  
+			```
+		lineageTag: 8d055c87-1d71-4f47-a501-ce62974d42f5
+
+	measure 'Rule 3 Short' = ```
+			VAR lid = [Selected LGA ID] VAR ppc = [Selected People Per Clinic] VAR priv = COALESCE(CALCULATE(MAX(mart_lga_decision[private_share]), ALL(mart_lga_decision), mart_lga_decision[lga_id] = lid), 0) RETURN "3. Contract? " & FORMAT(ppc, "#,0") & " per clinic, " & FORMAT(priv, "0%") & " private: " & IF(ppc > 12000 && priv >= 0.65, "YES", "no")
+			  
+			```
+		lineageTag: d1cd0e4a-be24-48fe-8e2f-9170d4680c83
+
+	measure 'Rule 4 Short' = ```
+			VAR ppc = [Selected People Per Clinic] RETURN "4. Add public clinics? " & FORMAT(ppc, "#,0") & " per clinic: " & IF(ppc > 10000, "YES", "no")
+			  
+			```
+		lineageTag: b44ad602-ce98-44a1-b9ca-ba7629254924
+
+	measure 'Result Short' = ```
+			"Result: " & [Selected Action]
+			  
+			```
+		lineageTag: ef93d5e7-d94f-41b0-902a-17807ea6af22
+
+	measure 'Same Count' = ```
+			VAR base = MAX(mart_lga_decision[action_low]) RETURN COALESCE(COUNTROWS(FILTER(mart_scenarios, mart_scenarios[action] = base)), 0)
+			  
+			```
+		formatString: 0
+		lineageTag: ab02e3ce-af71-46c3-ae45-4aa95f528815
+
+	measure 'Stability Label' = ```
+			VAR c = [Same Count] RETURN SWITCH(TRUE(), c = 18, "Robust", c >= 12, "Mostly stable", c >= 6, "Sensitive", "Fragile")
+			
+			
+			```
+		lineageTag: 71c8ae84-99e8-41e5-864a-afc3937ab7eb
+
 	column Column1
 		dataType: string
 		isHidden
